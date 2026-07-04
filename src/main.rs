@@ -1,21 +1,21 @@
 use std::{ffi::CString, fs, os::fd::OwnedFd, path::PathBuf, process::exit};
 
 use nix::{
-    mount::{MntFlags, MsFlags, mount, umount2},
-    sched::{CloneFlags, clone},
+    mount::{mount, umount2, MntFlags, MsFlags},
+    sched::{clone, CloneFlags},
     sys::{
         signal::Signal,
-        stat::{Mode, SFlag, mknod},
-        wait::{WaitStatus, waitpid},
+        stat::{mknod, Mode, SFlag},
+        wait::{waitpid, WaitStatus},
     },
     unistd::{chdir, execvp, pipe, pivot_root, read, sethostname, write},
 };
 
-struct Bonker {
+struct B0nker {
     id: String,
 }
 
-impl Bonker {
+impl B0nker {
     pub fn new(id: &str) -> Self {
         mount(
             None::<&str>,
@@ -29,7 +29,7 @@ impl Bonker {
     }
 
     pub fn set_host_name(&self) -> nix::Result<()> {
-        sethostname("bonker")?;
+        sethostname("B0nker")?;
         Ok(())
     }
     pub fn customize_limits(&self, max_memory: u32, max_pids: u32) -> Result<(), std::io::Error> {
@@ -162,7 +162,7 @@ fn child_function(command: &[String]) -> Result<(), std::io::Error> {
 }
 
 fn child_main(command: &[String], id: &str, write_fd: &OwnedFd) -> anyhow::Result<()> {
-    let oyster = Bonker::new(id);
+    let oyster = B0nker::new(id);
     oyster.set_host_name()?;
     oyster.customize_limits(10 * 1024 * 1024, 3)?;
     oyster.initlize_fs()?;
@@ -191,7 +191,7 @@ fn main() {
     let args: Vec<String> = std::env::args().collect();
 
     if args.len() < 3 || args[1] != "run" {
-        eprintln!("Usage: bonker run <command> [args...]");
+        eprintln!("Usage: b0nker run <command> [args...]");
         std::process::exit(1);
     }
 
