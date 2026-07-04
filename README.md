@@ -10,7 +10,7 @@
 
 ## Overview
 
-b0nker is a minimal container runtime written in Rust. It implements the core mechanisms containers are built on directly, without a daemon, an image format, or an OCI runtime layer. 
+b0nker is a minimal container runtime written in Rust. It implements the core mechanisms containers are built on directly without a daemon, an image format, or an OCI runtime layer. 
 Given a command, it creates a set of Linux namespaces, applies cgroup resource limits, constructs an isolated root filesystem using an overlay mount and pivot_root, and executes the command inside that environment.
 
 ## How it works
